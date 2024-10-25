@@ -1,0 +1,25 @@
+default: &default
+  adapter: mysql2
+  database: '<%= ENV['DATABASE_NAME'] %>'
+  username: '<%= ENV['DATABASE_USERNAME'] || 'root' %>'
+  password: '<%= ENV['DATABASE_PASSWORD'] || 'root' %>'
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  encoding: utf8
+  timeout: 5000
+
+development:
+  <<: *default
+  host: '<%= ENV['DATABASE_HOST'] || 'localhost' %>'
+
+staging:
+  <<: *default
+  host: '<%= ENV['DATABASE_HOST'] || 'localhost' %>'
+
+test:
+  <<: *default
+  host: '<%= ENV['DATABASE_HOST'] || 'localhost' %>'
+  database: 'aperture_test'
+
+production:
+  <<: *default
+  socket: /var/run/mysqld/mysqld.sock
