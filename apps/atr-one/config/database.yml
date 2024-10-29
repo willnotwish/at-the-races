@@ -18,7 +18,6 @@ staging:
 test:
   <<: *default
   host: '<%= ENV['DATABASE_HOST'] || 'localhost' %>'
-  database: 'aperture_test'
 
 production:
   <<: *default

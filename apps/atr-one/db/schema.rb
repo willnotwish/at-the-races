@@ -11,12 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20241025110711) do
+ActiveRecord::Schema.define(version: 20241025160712) do
 
-  create_table "things", force: :cascade do |t|
+  create_table "counter_updates", force: :cascade do |t|
+    t.string   "counter_code", limit: 255
+    t.string   "month_code",   limit: 255
+    t.integer  "value",        limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  create_table "counters", force: :cascade do |t|
+    t.string   "code",       limit: 255
+    t.integer  "value",      limit: 4,   default: 0
+    t.integer  "month_id",   limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "counters", ["month_id"], name: "index_counters_on_month_id", using: :btree
+
+  create_table "months", force: :cascade do |t|
     t.string   "name",       limit: 255
+    t.string   "code",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
 
+  add_index "months", ["code"], name: "index_months_on_code", length: {"code"=>191}, using: :btree
+
+  add_foreign_key "counters", "months"
 end
