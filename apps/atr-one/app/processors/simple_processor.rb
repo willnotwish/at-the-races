@@ -1,4 +1,5 @@
 class SimpleProcessor
+  include AtrOne::Deps[:logger]
   include Tracing
   
   def call(update:, **)

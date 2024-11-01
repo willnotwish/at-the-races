@@ -1,0 +1,43 @@
+= form_for(race) do |builder|
+  - if race.errors.any?
+    #error_explanation.mt-4.mb-8.border-4.border-red-500.p-4
+      h2.text-red-500.text-lg= "#{pluralize(race_config.errors.count, "error")} prevented this race from being saved:"
+
+      ul.mt-4.list-disc
+        - race.errors.full_messages.each do |message|
+          li.mt-1.ml-4= message
+
+  .grid.grid-cols-1.gap-6
+    = builder.label :name, class: 'block'
+      span.text-gray-700 Name
+      = builder.text_field :name, class: 'mt-1 block w-full bg-white'
+
+    = builder.label :description, class: 'block'
+      span.text-gray-700 Description
+      = builder.text_field :description, class: 'mt-1 block w-full'
+  
+    = builder.label :thread_count, class: 'block'
+      span.text-gray-700 Thread count
+      = builder.number_field :thread_count, class: 'mt-1 block w-full'
+
+    = builder.label :race_delay, class: 'block'
+      span.text-gray-700 Race delay
+      = builder.number_field :race_delay, class: 'mt-1 block w-full'
+
+    = builder.label :lock_timeout, class: 'block'
+      span.text-gray-700 Lock timeout
+      = builder.number_field :lock_timeout, class: 'mt-1 block w-full'
+
+    = builder.label :month_code, class: 'block'
+      span.text-gray-700 Month code
+      = builder.text_field :month_code, class: 'mt-1 block w-full'
+
+    = builder.label :counter_code, class: 'block'
+      span.text-gray-700 Counter code
+      = builder.text_field :counter_code, class: 'mt-1 block w-full'
+
+    = builder.label :update_count, class: 'block'
+      span.text-gray-700 Update count
+      = builder.number_field :update_count, class: 'mt-1 block w-full'
+
+    = builder.submit 'Start the race now', class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4'

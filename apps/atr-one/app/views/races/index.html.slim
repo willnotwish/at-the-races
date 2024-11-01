@@ -1,0 +1,26 @@
+h2.font-bold.text-xl.mt-8.p-2 Races
+
+#notice= notice
+
+table.w-full
+  thead
+    tr
+      th.text-left.p-2 Name
+      th.text-left.p-2 Description
+      th.text-left.p-2 Race delay
+      th.text-left.p-2 Thread count
+      th.text-left.p-2 Lock timeout
+      th.text-left.p-2 Update count
+      th.p-2
+
+  tbody
+    - @races.each do |race|
+      tr.odd:bg-gray-300
+        td.p-2 = race.name
+        td.p-2 = race.description
+        td.p-2 = race.race_delay
+        td.p-2 = race.thread_count
+        td.p-2 = race.lock_timeout
+        td.p-2 = race.update_count
+        td.p-2 = link_to 'Show', race, class: 'text-orange-700 hover:underline'
+

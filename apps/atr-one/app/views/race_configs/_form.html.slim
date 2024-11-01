@@ -1,0 +1,31 @@
+= form_for(race_config) do |builder|
+  - if race_config.errors.any?
+    #error_explanation.mt-4.mb-8.border-4.border-red-500.p-4
+      h2.text-red-500.text-lg= "#{pluralize(race_config.errors.count, "error")} prevented this config from being saved:"
+
+      ul.mt-4.list-disc
+        - race_config.errors.full_messages.each do |message|
+          li.mt-1.ml-4= message
+
+  .grid.grid-cols-1.gap-6
+    = builder.label :name, class: 'block'
+      span.text-gray-700 Name
+      = builder.text_field :name, class: 'mt-1 block w-full bg-white'
+
+    = builder.label :description, class: 'block'
+      span.text-gray-700 Description
+      = builder.text_field :description, class: 'mt-1 block w-full'
+  
+    = builder.label :thread_count, class: 'block'
+      span.text-gray-700 Thread count
+      = builder.text_field :thread_count, class: 'mt-1 block w-full'
+
+    = builder.label :race_delay, class: 'block'
+      span.text-gray-700 Race delay
+      = builder.text_field :race_delay, class: 'mt-1 block w-full'
+
+    = builder.label :lock_timeout, class: 'block'
+      span.text-gray-700 Lock timeout
+      = builder.text_field :lock_timeout, class: 'mt-1 block w-full'
+  
+    = builder.submit 'Submit', class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4'

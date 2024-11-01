@@ -1,0 +1,26 @@
+.bg-slate-200.p-4.mb-4
+  - if results.count.zero?
+    'This race has never been run.
+  - elsif results.count == 1
+    'This race has been run once.
+  - elsif results.count == 2
+    'This race has been run twice.
+  - else
+    'This race has been run #{results.count} times.
+
+- unless results.count.zero?
+  table.w-full
+    thead
+      tr
+        th.text-left.p-2 Started
+        th.text-left.p-2 Duration
+        th.text-left.p-2 Counters
+        th.p-2
+
+    tbody
+      - results.each do |result|
+        tr
+          td.p-2 = result.started_at.to_s(:racing)
+          td.p-2 #{result.duration} seconds
+          td.p-2 = result.counter_count
+          td.p-2 = link_to 'Show', result, class: 'text-orange-700 hover:underline'

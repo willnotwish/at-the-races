@@ -9,7 +9,7 @@ services:
       DATABASE_NAME: atr_one
       DATABASE_USERNAME: root
       DATABASE_PASSWORD: root
-      RAILS_MAX_THREADS: 1
+      RAILS_MAX_THREADS: 10
     stdin_open: true
     tty: true
     user: nick

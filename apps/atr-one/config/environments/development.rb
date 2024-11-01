@@ -6,8 +6,10 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  # Do not eager load code on boot.
-  config.eager_load = false
+  # EXPERIMENTAL. Eager load code on boot.
+  # This is a multithreaded application: we will run into issues if we lazy load classes
+  # in child threads.
+  config.eager_load = true
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true

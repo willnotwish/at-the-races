@@ -1,4 +1,5 @@
 class DatabaseLockingProcessor
+  include AtrOne::Deps[:logger]
   include Tracing
   
   def call(update:, **opts)

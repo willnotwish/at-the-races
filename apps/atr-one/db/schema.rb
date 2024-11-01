@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20241025160712) do
+ActiveRecord::Schema.define(version: 20241031105353) do
 
   create_table "counter_updates", force: :cascade do |t|
     t.string   "counter_code", limit: 255
@@ -40,5 +40,40 @@ ActiveRecord::Schema.define(version: 20241025160712) do
 
   add_index "months", ["code"], name: "index_months_on_code", length: {"code"=>191}, using: :btree
 
+  create_table "race_configs", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.text     "description",  limit: 65535
+    t.integer  "thread_count", limit: 4
+    t.integer  "race_delay",   limit: 4
+    t.integer  "lock_timeout", limit: 4
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "race_results", force: :cascade do |t|
+    t.integer  "race_id",       limit: 4
+    t.datetime "started_at"
+    t.float    "duration",      limit: 24
+    t.integer  "counter_count", limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "race_results", ["race_id"], name: "index_race_results_on_race_id", using: :btree
+
+  create_table "races", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.text     "description",  limit: 65535
+    t.integer  "race_delay",   limit: 4
+    t.integer  "thread_count", limit: 4
+    t.integer  "lock_timeout", limit: 4
+    t.integer  "update_count", limit: 4
+    t.string   "month_code",   limit: 255
+    t.string   "counter_code", limit: 255
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   add_foreign_key "counters", "months"
+  add_foreign_key "race_results", "races"
 end
