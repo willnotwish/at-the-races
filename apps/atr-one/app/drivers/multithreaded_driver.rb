@@ -1,4 +1,5 @@
 class MultithreadedDriver
+  include AtrOne::Deps[:logger]
   include Tracing
 
   def call(updates:, processor:, thread_count: 2, **processor_opts)

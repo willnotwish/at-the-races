@@ -1,0 +1,26 @@
+h2.font-bold.text-xl.mt-8.p-2 Race configs
+
+#notice= notice
+
+table.w-full
+  thead
+    tr
+      th.text-left.p-2 Name
+      th.text-left.p-2 Description
+      th.text-left.p-2 Thread count
+      th.text-left.p-2 Race delay
+      th.text-left.p-2 Lock timeout
+      th.text-left.p-2
+
+  tbody
+    - @race_configs.each do |config|
+      tr.odd:bg-gray-100
+        td.p-2= config.name
+        td.p-2= config.description
+        td.p-2= config.thread_count
+        td.p-2= config.race_delay
+        td.p-2= config.lock_timeout
+        td.p-2= link_to 'Show', config, class: 'text-orange-700 hover:underline'
+
+nav.mt-8.border-t-2.p-2
+  = link_to 'New', new_race_config_path, class: 'text-orange-700 hover:underline'

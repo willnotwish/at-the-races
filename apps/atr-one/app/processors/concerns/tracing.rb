@@ -1,10 +1,6 @@
 module Tracing
   extend ActiveSupport::Concern
 
-  included do
-    include AtrOne::Deps[:logger]
-  end
-
   def trace(msg)
     return unless logger
 

@@ -55,3 +55,7 @@ gem "shoulda-matchers", "~> 4.5"
 gem "dry-rails", "~> 0.3.0"
 
 gem "factory_bot_rails", "~> 5.2"
+
+gem 'slim-rails', '3.2.0'
+
+gem "dry-transaction", "~> 0.13.2"

@@ -1,0 +1,25 @@
+h2.font-bold.text-xl.mt-8 Race config
+
+#notice= notice
+
+dl.mt-8
+  dt.font-light Name
+  dd= @race_config.name
+
+  dt.mt-4.font-light Description
+  dd= @race_config.description
+
+  dt.mt-4.font-light Thread count
+  dd= @race_config.thread_count
+
+  dt.mt-4.font-light Race delay (seconds)
+  dd= @race_config.race_delay
+
+  dt.mt-4.font-light Lock timeout (seconds)
+  dd= @race_config.lock_timeout
+
+nav.mt-8.border-2.p-2
+  = link_to 'Edit', edit_race_config_path(@race_config), class: 'text-orange-700 hover:underline'
+  = link_to 'Back to list', race_configs_path, class: 'text-orange-700 hover:underline pl-4'
+  = link_to 'New race from this config', [:new, @race_config, :race], class: 'text-orange-700 hover:underline pl-4'
+

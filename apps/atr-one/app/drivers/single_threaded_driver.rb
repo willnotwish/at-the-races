@@ -1,5 +1,6 @@
 # Processes updates in sequence on the current thread using the given processor
 class SingleThreadedDriver
+  include AtrOne::Deps[:logger]
   include Tracing
 
   def call(updates:, processor:, **)

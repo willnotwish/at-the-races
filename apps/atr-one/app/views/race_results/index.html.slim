@@ -1,0 +1,24 @@
+h2.font-bold.text-xl.mt-8.p-2 Race results
+
+#notice= notice
+
+table.w-full
+  thead
+    tr
+      th.text-left.p-2 Name
+      th.text-left.p-2 Description
+      th.text-left.p-2 Started
+      th.text-left.p-2 Duration (secs)
+      th.text-left.p-2 Number of counters
+      th.p-2
+
+  tbody
+    - @race_results.each do |result|
+      tr
+        td.p-2 = link_to result.race.name, result.race, class: 'text-orange-700 hover:underline'
+        td.p-2 = result.race.description
+        td.p-2 = result.started_at.to_s(:racing)
+        td.p-2 = result.duration
+        td.p-2 = result.counter_count
+        td.p-2 = link_to 'Show', result, class: 'text-orange-700 hover:underline'
+

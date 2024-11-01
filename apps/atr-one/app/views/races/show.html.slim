@@ -1,0 +1,28 @@
+h2.font-bold.text-xl.mt-8 Race
+
+#notice = notice
+
+dl.mt-8
+  dt.font-light Name
+  dd= @race.name
+
+  dt.mt-4.font-light Description
+  dd= @race.description
+
+  dt.mt-4.font-light Thread count
+  dd= @race.thread_count
+
+  dt.mt-4.font-light Race delay (seconds)
+  dd= @race.race_delay
+
+  dt.mt-4.font-light Lock timeout (seconds)
+  dd= @race.lock_timeout
+
+  dt.mt-4.font-light Update count
+  dd= @race.update_count
+
+.mt-8
+  = render partial: 'results_summary', object: @race_results, as: :results
+
+nav.mt-8.border-2.p-2
+  = link_to 'Back to list', races_path, class: 'text-orange-700 hover:underline pl-4'

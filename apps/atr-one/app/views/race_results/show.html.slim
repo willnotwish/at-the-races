@@ -1,0 +1,23 @@
+h2.font-bold.text-xl.mt-8 Race result
+
+#notice= notice
+
+dl.mt-8
+  dt.font-light Name
+  dd= link_to @race.name, @race, class: 'text-orange-700 hover:underline'
+
+  dt.mt-4.font-light Description
+  dd= @race.description
+
+  dt.mt-4.font-light Started
+  dd= @race_result.started_at.to_s(:racing)
+
+  dt.mt-4.font-light Duration
+  dd #{@race_result.duration} seconds
+
+  dt.mt-4.font-light Number of counters created
+  dd= @race_result.counter_count
+
+nav.mt-8.border-2.p-2
+  = link_to 'All results', race_results_path, class: 'text-orange-700 hover:underline pl-4'
+ 
