@@ -32,7 +32,7 @@ module Races
       { race: race, updates: updates }
     end
 
-    def perform_race(race:, updates:, processor: DatabaseLockingProcessor.new, driver: MultithreadedDriver.new)
+    def perform_race(race:, updates:, processor: DatabaseLockingProcessor.new, driver: MultiprocessDriver.new)
       started_at = Time.now
       driver.call(
         updates: updates,
