@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe MultithreadedDriver, type: :driver do
+RSpec.describe MultiprocessDriver, type: :driver do
   self.use_transactional_fixtures = false   # turn off Rspec wrapping examples in transactions
 
   let(:driver) { subject } # alias
