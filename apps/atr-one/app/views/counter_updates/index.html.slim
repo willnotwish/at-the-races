@@ -1,0 +1,24 @@
+h2.font-bold.text-xl.my-8.p-2 Counter updates for race: #{@race_result.race.name}
+
+#notice= notice
+
+table.w-full
+  thead
+    tr
+      th.text-left.p-2 Month
+      th.text-left.p-2 Counter
+      th.text-left.p-2 Value
+      th.text-left.p-2 Result
+      th.text-left.p-2 By
+      th.text-left.p-2 At
+
+  tbody
+    - @counter_updates.each do |update|
+      tr.odd:bg-gray-100
+        td.p-2 = update.month_code
+        td.p-2 = update.counter_code
+        td.p-2 = update.value
+        td.p-2 = update.aasm.current_state
+        td.p-2 = update.processed_by
+        td.p-2 = update.processed_at&.to_s(:racing) || update.failed_at&.to_s(:racing)
+

@@ -11,15 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20241031105353) do
+ActiveRecord::Schema.define(version: 20241105193139) do
 
   create_table "counter_updates", force: :cascade do |t|
-    t.string   "counter_code", limit: 255
-    t.string   "month_code",   limit: 255
-    t.integer  "value",        limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "counter_code",   limit: 255
+    t.string   "month_code",     limit: 255
+    t.integer  "value",          limit: 4
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "aasm_state",     limit: 4
+    t.datetime "allocated_at"
+    t.datetime "processed_at"
+    t.datetime "failed_at"
+    t.integer  "race_result_id", limit: 4
+    t.string   "processed_by",   limit: 255
   end
+
+  add_index "counter_updates", ["race_result_id"], name: "index_counter_updates_on_race_result_id", using: :btree
 
   create_table "counters", force: :cascade do |t|
     t.string   "code",       limit: 255
@@ -72,8 +80,11 @@ ActiveRecord::Schema.define(version: 20241031105353) do
     t.string   "counter_code", limit: 255
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.string   "processor",    limit: 255
+    t.string   "driver",       limit: 255
   end
 
+  add_foreign_key "counter_updates", "race_results"
   add_foreign_key "counters", "months"
   add_foreign_key "race_results", "races"
 end

@@ -15,6 +15,7 @@ Dry::Rails.container do
   register 'logger', logger
 
   auto_register!('app/processors')
+  auto_register!('app/drivers')
 end
 
 if ENV['RAILS_LOG_AR_TO_STDOUT'] == '1'

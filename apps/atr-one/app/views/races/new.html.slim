@@ -1,6 +1,5 @@
 h2.font-bold.text-xl.mt-8.mb-4 New race
-
-= render partial: 'form', object: @race, as: :race
+= render partial: 'form', object: @race, as: :race, locals: { processors: @processors, drivers: @drivers, months: @months }
 
 nav.mt-8
   = link_to 'Cancel', races_path, class: 'text-orange-700 hover:underline'

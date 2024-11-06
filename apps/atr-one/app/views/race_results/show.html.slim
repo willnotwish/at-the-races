@@ -3,8 +3,8 @@ h2.font-bold.text-xl.mt-8 Race result
 #notice= notice
 
 dl.mt-8
-  dt.font-light Name
-  dd= link_to @race.name, @race, class: 'text-orange-700 hover:underline'
+  dt.font-light.inline-block Name
+  dd.inline-block.pl-4= link_to @race.name, @race, class: 'text-orange-700 hover:underline'
 
   dt.mt-4.font-light Description
   dd= @race.description
@@ -17,6 +17,19 @@ dl.mt-8
 
   dt.mt-4.font-light Number of counters created
   dd= @race_result.counter_count
+
+  dt.mt-8.mb-4.border-t Updates #{link_to('view', [@race_result, :counter_updates], class: 'text-orange-700 hover:underline pl-2 text-sm')}
+  table
+    thead
+      tr
+        th.pr-2.text-left.font-light Pending
+        th.pr-2.text-left.font-light Allocated
+        th.pr-2.text-left.font-light Processed
+        th.pr-2.text-left.font-light Failed
+    tbody
+      tr
+        - %w[pending allocated processed failed].each do |state|
+          td.pr-2= @race_result.counter_updates.send(state).count
 
 nav.mt-8.border-2.p-2
   = link_to 'All results', race_results_path, class: 'text-orange-700 hover:underline pl-4'

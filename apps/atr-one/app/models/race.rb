@@ -2,9 +2,6 @@ class Race < ActiveRecord::Base
   validates(
     :name,
     :description,
-    # :race_delay,
-    # :lock_timeout,
-    # :thread_count,
     :month_code,
     :counter_code,
     presence: true
@@ -18,5 +15,6 @@ class Race < ActiveRecord::Base
     numericality: { only_integer: true }
   )
 
+  # Each time a race is run it generates a set of results
   has_many :race_results
 end
