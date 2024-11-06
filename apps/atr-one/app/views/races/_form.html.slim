@@ -7,37 +7,50 @@
         - race.errors.full_messages.each do |message|
           li.mt-1.ml-4= message
 
-  .grid.grid-cols-1.gap-6
-    = builder.label :name, class: 'block'
-      span.text-gray-700 Name
-      = builder.text_field :name, class: 'mt-1 block w-full bg-white'
+  .my-12.border-2.border-slate-400.p-4
+    h2.mb-8.text-lg General
+    = builder.label :name, class: 'block mt-4'
+      span.text-gray-700.font-light Name
+      = builder.text_field :name, class: 'ml-2 p-1'
 
-    = builder.label :description, class: 'block'
-      span.text-gray-700 Description
-      = builder.text_field :description, class: 'mt-1 block w-full'
+    = builder.label :description, class: 'block mt-4'
+      span.text-gray-700.font-light Description
+      = builder.text_field :description, class: 'mt-2 w-full'
+
+  .my-12.border-2.border-slate-400.p-4
+    h2.mb-8.text-lg Updates
+    = builder.label :month_code, class: 'block mt-4'
+      span.text-gray-700.font-light Month
+      = builder.select :month_code, options_for_select(months), {}, class: 'ml-2 p-1'
+
+    = builder.label :counter_code, class: 'block mt-4'
+      span.text-gray-700.font-light Counter code
+      = builder.text_field :counter_code, class: 'ml-2 p-1'
+
+    = builder.label :update_count, class: 'block mt-4'
+      span.text-gray-700.font-light Number of updates to process
+      = builder.number_field :update_count, class: 'ml-2 p-1'
+
+  .my-12.border-2.border-slate-400.p-4
+    h2.mb-8.text-lg Concurrency-related options
+    = builder.label :processor, class: 'block mt-4'
+      span.text-gray-700.font-light Processor
+      = builder.select :processor, options_for_select(processors), {}, class: 'ml-2 p-1'
   
-    = builder.label :thread_count, class: 'block'
-      span.text-gray-700 Thread count
-      = builder.number_field :thread_count, class: 'mt-1 block w-full'
+    = builder.label :driver, class: 'block mt-4'
+      span.text-gray-700.font-light Driver
+      = builder.select :driver, options_for_select(drivers), {}, class: 'ml-2 p-1'
+  
+    = builder.label :thread_count, class: 'block mt-4'
+      span.text-gray-700.font-light Thread/process count
+      = builder.number_field :thread_count, class: 'ml-2 p-1'
 
-    = builder.label :race_delay, class: 'block'
-      span.text-gray-700 Race delay
-      = builder.number_field :race_delay, class: 'mt-1 block w-full'
+    = builder.label :race_delay, class: 'block mt-4'
+      span.text-gray-700.font-light Race delay (seconds)
+      = builder.number_field :race_delay, class: 'ml-2 p-1'
 
-    = builder.label :lock_timeout, class: 'block'
-      span.text-gray-700 Lock timeout
-      = builder.number_field :lock_timeout, class: 'mt-1 block w-full'
+    = builder.label :lock_timeout, class: 'block mt-4'
+      span.text-gray-700.font-light Lock timeout (seconds)
+      = builder.number_field :lock_timeout, class: 'ml-2 p-1'
 
-    = builder.label :month_code, class: 'block'
-      span.text-gray-700 Month code
-      = builder.text_field :month_code, class: 'mt-1 block w-full'
-
-    = builder.label :counter_code, class: 'block'
-      span.text-gray-700 Counter code
-      = builder.text_field :counter_code, class: 'mt-1 block w-full'
-
-    = builder.label :update_count, class: 'block'
-      span.text-gray-700 Update count
-      = builder.number_field :update_count, class: 'mt-1 block w-full'
-
-    = builder.submit 'Start the race now', class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4'
+  = builder.submit 'Start the race now', class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4'

@@ -1,7 +1,9 @@
 class DatabaseLockingProcessor
   include AtrOne::Deps[:logger]
   include Tracing
-  
+
+  DEFAULT_LOCK_TIMEOUT = 5
+
   def call(update:, **opts)
     trace "Starting. options: #{opts}"
     raise ArgumentError, 'update parameter must be specified' unless update
@@ -9,6 +11,9 @@ class DatabaseLockingProcessor
     month = Month.find_by!(code: update.month_code)
     trace "Month: #{month.code}"
 
+    # The update has been allocated to this processor
+    update.allocate!
+  
     # There is a possibile race condition between querying for an existing counter
     # and creating a new one.
     # 
@@ -43,8 +48,8 @@ class DatabaseLockingProcessor
     #   find_by(attributes) || create!(attributes, &block)
     # end
 
-    # In general, the less time spent inside the critical section, the better. However, we add
-    # a delay here (between the SELECT and INSERT) in order to make the race condition more likely
+    # In general, the less time spent inside the critical section (between the SELECT and INSERT), the better.
+    # In this case, however, we add a deliberate delay in order to make the race condition more likely
     attrs = { code: update.counter_code, month: month }
 
     counter = Counter.find_by(attrs)
@@ -56,7 +61,9 @@ class DatabaseLockingProcessor
       trace "Created counter #{counter.code} for month #{month.code}"
     end
 
-    counter.update!(value: update.value)
+    counter.value = update.value
+    update.process! # marks update as processed
+
     trace "Updated counter #{counter.code}. Value: #{counter.value}"
   end
 
@@ -69,17 +76,18 @@ class DatabaseLockingProcessor
   end
 
   def with_global_lock(**opts)
-    return unless obtain_lock(**opts)
+    raise ArgumentError, 'Missing block' unless block_given?   
+    return unless obtain_mysql_lock(**opts)
     
     begin
       yield
     ensure
-      release_lock(**opts)
+      release_mysql_lock(**opts)
     end
   end
 
   # Tries to obtain a lock with the given name, using a timeout of timeout seconds. A negative timeout value means infinite timeout.
-  def obtain_lock(name:, lock_timeout: 5, **)
+  def obtain_mysql_lock(name:, lock_timeout: DEFAULT_LOCK_TIMEOUT, **)
     # GET_LOCK returns 1 if the lock was obtained successfully, 0 if the attempt timed out (for example, because another client has previously locked the name),
     # or NULL if an error occurred (such as running out of memory or the thread was killed with mysqladmin kill).
     case execute_raw_sql("SELECT GET_LOCK('#{name}', #{lock_timeout});")
@@ -95,7 +103,7 @@ class DatabaseLockingProcessor
     end
   end
 
-  def release_lock(name:, **)
+  def release_mysql_lock(name:, **)
     case execute_raw_sql("SELECT RELEASE_LOCK('#{name}');")
     when 0
       trace "Failed to release lock: #{name}. Lock was not established by this thread."

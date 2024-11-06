@@ -75,6 +75,30 @@ RSpec.describe MultiprocessDriver, type: :driver do
       end
 
       it_behaves_like 'it creates only one counter'
+
+      it 'returns a hash of updates' do
+        expect(
+          driver.call(
+            updates: updates, processor: processor, thread_count: thread_count, **processor_opts
+          )
+        ).to be_a(Hash)
+      end
+
+      describe 'the hash returned' do
+        it 'has one key per thread' do
+          hash = driver.call(
+            updates: updates, processor: processor, thread_count: thread_count, **processor_opts
+          )
+          expect(hash.keys.size).to eq(thread_count)
+        end
+
+        it 'has an array of updates for each value' do
+          hash = driver.call(
+            updates: updates, processor: processor, thread_count: thread_count, **processor_opts
+          )
+          expect(hash.values.all? { |value| value.is_a?(Array) }).to eq(true)
+        end
+      end
     end
   end
 end

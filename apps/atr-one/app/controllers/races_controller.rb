@@ -13,6 +13,14 @@ class RacesController < ApplicationController
     @race_config = RaceConfig.find params[:race_config_id]
     @race = Race.new(@race_config.attributes)
     @race.update_count = 100
+
+    @processors = AtrOne::Container.keys
+                                   .select { |key| key =~ /^.*_processor$/ }
+                                   .map { |name| [name.humanize, name] }
+    @drivers = AtrOne::Container.keys
+                                .select { |key| key =~ /^.*_driver$/ }
+                                .map { |name| [name.humanize, name] }
+    @months = Month.all.map { |month| [month.name, month.code] }
   end
 
   def create

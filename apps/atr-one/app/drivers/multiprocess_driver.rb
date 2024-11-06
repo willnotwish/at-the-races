@@ -3,20 +3,26 @@ class MultiprocessDriver
   include Tracing
 
   def call(updates:, processor:, thread_count: 2, **processor_opts)
-    concurrency = thread_count # compatibility: needs removing
-    trace "Starting. About to process #{updates.count} updates using #{concurrency} processes. Processor options: #{processor_opts}"
+    # thread_count should really be called process_count
+    process_count = thread_count
 
-    concurrency.times do
-      fork do
-        process(updates: updates, processor: processor, **processor_opts)
+    trace "Starting. About to process #{updates.count} updates using #{process_count} processes. Processor options: #{processor_opts}"
+
+    # Fork a new process for each group so they are processed concurrently
+    groups = {}
+    updates.in_groups(process_count, false).each do |group|
+      pid = fork do
+        process(updates: group, processor: processor, **processor_opts)
       end
+      groups[pid.to_s] = group
     end
-    Process.waitall
+    Process.waitall # wait for the forked processes to finish before continuing
 
     # Need this but not sure why (to do with forking I guess)
     ActiveRecord::Base.establish_connection
 
     trace 'Complete'
+    groups
   end
 
   private
