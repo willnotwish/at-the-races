@@ -5,9 +5,12 @@ html
     meta name="viewport" content="width=device-width,initial-scale=1"
 
     = stylesheet_link_tag 'application', media: 'all'
+
     = javascript_include_tag 'application'
-    = csrf_meta_tags
     script src="https://cdn.tailwindcss.com"
+    script src="https://cdn.pubnub.com/sdk/javascript/pubnub.8.2.10.js"
+
+    = csrf_meta_tags
 
   body.container.mx-auto.bg-slate-200
     header.mb-8.py-4

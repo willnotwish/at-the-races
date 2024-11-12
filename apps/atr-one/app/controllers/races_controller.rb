@@ -17,30 +17,20 @@ class RacesController < ApplicationController
     @processors = AtrOne::Container.keys
                                    .select { |key| key =~ /^.*_processor$/ }
                                    .map { |name| [name.humanize, name] }
+                                  
     @drivers = AtrOne::Container.keys
                                 .select { |key| key =~ /^.*_driver$/ }
                                 .map { |name| [name.humanize, name] }
+
     @months = Month.all.map { |month| [month.name, month.code] }
   end
 
   def create
-    # Uses dry-transaction
-    Races::CreateTransaction
-      .new
-      .tap { |creation| creation.subscribe(StepLogger.new) }
-      .call(race_params) do |match|
-        match.success { |race_result| redirect_to(race_result, info: 'Race over') }
+    RunRaceJob.perform_later(race_params)
+    redirect_to :race_running, notice: 'Race is currently in progress. Please wait...'
+  end
 
-        match.failure(:check_params) { |errors| raise ActionController::BadRequest, errors.to_s }
-    
-        # match.failure(:build_model) do |record|
-        #   @form = record
-        #   render(action_to_render_on_failure, status: :unprocessable_entity)
-        # end
-    
-        match.failure { |error| raise error }
-    
-      end
+  def running
   end
 
   private
@@ -59,7 +49,9 @@ class RacesController < ApplicationController
           :lock_timeout,
           :update_count,
           :month_code,
-          :counter_code
+          :counter_code,
+          :processor,
+          :driver
         )
     end
 end

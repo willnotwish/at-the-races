@@ -10,6 +10,12 @@ services:
       DATABASE_USERNAME: root
       DATABASE_PASSWORD: root
       RAILS_MAX_THREADS: 10
+      REDIS_URL: redis://redis:6379/11
+      ABLY_API_KEY: JGNyew.ZUEUWQ:uLlr1i7zv8hFSPH7UuOToBQcp-kK8NCwCuylYWf38ts
+      PUBNUB_SUBSCRIBE_KEY: sub-c-c8ab435c-983f-4236-80e2-531f6c888eaa
+      PUBNUB_PUBLISH_KEY: pub-c-7ee77e5d-96fc-4c7f-a452-85c71713100c
+      PUBNUB_SECRET_KEY: sec-c-NmI0ZTA5NmEtODU1Yy00MjI5LTllN2EtNjAxZmFhNmU5ZjRi
+      PUBNUB_USER_ID: at-the-races-user
     stdin_open: true
     tty: true
     user: nick
@@ -39,6 +45,47 @@ services:
     ports:
       - 3316:3306
 
-volumes: 
+  sidekiq:
+    image: willnotwish/at-the-races-dev:2.5.8
+    environment:
+      RAILS_LOG_TO_STDOUT: 1
+      DATABASE_HOST: mysql55
+      DATABASE_NAME: atr_one
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: root
+      RAILS_MAX_THREADS: 10
+      REDIS_URL: redis://redis:6379/11
+      ABLY_API_KEY: JGNyew.ZUEUWQ:uLlr1i7zv8hFSPH7UuOToBQcp-kK8NCwCuylYWf38ts
+      PUBNUB_SUBSCRIBE_KEY: sub-c-c8ab435c-983f-4236-80e2-531f6c888eaa
+      PUBNUB_PUBLISH_KEY: pub-c-7ee77e5d-96fc-4c7f-a452-85c71713100c
+      PUBNUB_SECRET_KEY: sec-c-NmI0ZTA5NmEtODU1Yy00MjI5LTllN2EtNjAxZmFhNmU5ZjRi
+      PUBNUB_USER_ID: at-the-races-user
+
+    stdin_open: true
+    tty: true
+    user: nick
+    volumes:
+      - ./apps/atr-one:/app
+      - atr-one-bundle:/usr/local/bundle
+    working_dir: /app
+    depends_on: 
+      - mysql55
+      - redis
+    command: bundle exec sidekiq -q default
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis:/data
+    ports:
+      - "5003:6379"    
+  
+  # kafka:
+  #   image: apache/kafka:3.9.0
+  #   ports:
+  #     - 3317:3306
+
+volumes:
   atr-one-bundle:
   atr-one-mysql55-data:
+  redis:
