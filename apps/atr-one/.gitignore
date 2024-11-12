@@ -11,3 +11,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Docker compose secrets. See https://docs.docker.com/compose/how-tos/use-secrets/
+/config/secrets/*

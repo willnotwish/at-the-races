@@ -1,3 +1,5 @@
+require 'tracing'
+
 class MultiprocessDriver
   include AtrOne::Deps[:logger]
   include Tracing

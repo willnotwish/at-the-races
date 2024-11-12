@@ -1,3 +1,5 @@
+require 'tracing'
+
 class DatabaseLockingProcessor
   include AtrOne::Deps[:logger]
   include Tracing
