@@ -14,6 +14,7 @@ end
 Dry::Rails.container do
   register 'logger', logger
 
+  auto_register!('app/event_brokers')
   auto_register!('app/processors')
   auto_register!('app/drivers')
 end

@@ -1,6 +1,10 @@
+require 'tracing'
+
 class MultiprocessDriver
   include AtrOne::Deps[:logger]
   include Tracing
+
+  include AtrOne::Deps[:message_bus]
 
   def call(updates:, processor:, thread_count: 2, **processor_opts)
     # thread_count should really be called process_count
@@ -28,9 +32,13 @@ class MultiprocessDriver
   private
 
   def process(updates:, processor:, **processor_opts)
+    message_bus.publish('driver.start', text: "driver started")
+
     updates.each do |update|
       trace "Processing update: #{update.id}. Value: #{update.value}"
       processor.call(update: update, **processor_opts)
     end
+
+    message_bus.publish('driver.stop', text: "driver stop")
   end
 end

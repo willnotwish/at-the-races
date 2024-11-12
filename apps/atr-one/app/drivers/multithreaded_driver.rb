@@ -7,7 +7,9 @@ class MultithreadedDriver
 
     worker_threads = []
     thread_count.times do
-      worker_threads << Thread.new { process(updates: updates, processor: processor, **processor_opts) }
+      worker_threads << Thread.new do 
+        process(updates: updates, processor: processor, **processor_opts)
+      end
     end
     worker_threads.each { |t| t.join }
 

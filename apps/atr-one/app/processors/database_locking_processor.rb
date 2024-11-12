@@ -1,6 +1,10 @@
+require 'tracing'
+
 class DatabaseLockingProcessor
   include AtrOne::Deps[:logger]
   include Tracing
+
+  include AtrOne::Deps[:message_bus]
 
   DEFAULT_LOCK_TIMEOUT = 5
 
@@ -11,10 +15,10 @@ class DatabaseLockingProcessor
     month = Month.find_by!(code: update.month_code)
     trace "Month: #{month.code}"
 
-    # The update has been allocated to this processor
     update.allocate!
-  
-    # There is a possibile race condition between querying for an existing counter
+    message_bus.publish('update.allocated', text: "update #{update.id} allocated")
+    
+    # There is a possible race condition between querying for an existing counter
     # and creating a new one.
     # 
     # After process/thread A has failed to find a counter with the given code for the given month,
@@ -71,18 +75,22 @@ class DatabaseLockingProcessor
     return unless race_delay.present?
 
     trace "Delaying for #{race_delay} seconds"
+    message_bus.publish('race_delay.starting', text: "Race delay for #{race_delay} seconds starting...")
     sleep(race_delay)
+    message_bus.publish('race_delay.ended', text: "Race delay for #{race_delay} seconds over.")
     trace 'Delay over'
   end
 
   def with_global_lock(**opts)
     raise ArgumentError, 'Missing block' unless block_given?   
     return unless obtain_mysql_lock(**opts)
+    message_bus.publish('lock.acquired', text: "Lock acquired.")
     
     begin
       yield
     ensure
       release_mysql_lock(**opts)
+      message_bus.publish('lock.released', text: "Lock released.")
     end
   end
 

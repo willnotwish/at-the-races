@@ -22,5 +22,11 @@ module AtrOne
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # Sidekiq config
+    config.active_job.queue_adapter = :sidekiq
+
+    # To start
+    # bundle exec sidekiq -q default
   end
 end
