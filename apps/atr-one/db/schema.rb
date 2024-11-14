@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20241105193139) do
     t.datetime "updated_at",             null: false
   end
 
-  add_index "months", ["code"], name: "index_months_on_code", length: {"code"=>191}, using: :btree
+  add_index "months", ["code"], name: "index_months_on_code", using: :btree
 
   create_table "race_configs", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -82,6 +82,12 @@ ActiveRecord::Schema.define(version: 20241105193139) do
     t.datetime "updated_at",                 null: false
     t.string   "processor",    limit: 255
     t.string   "driver",       limit: 255
+  end
+
+  create_table "things", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   add_foreign_key "counter_updates", "race_results"

@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   end
 
   resources :races, except: [:new]
-  get 'race/running', as: :race_running, to: 'races#running'
+  # get 'race/running', as: :race_running, to: 'races#running'
+  post 'races/:id/start', as: :start, to: 'races#start'
 
   resources :race_results, only: %i[index show], path: 'race-results' do
     resources :counter_updates, only: %i[index show], path: 'counter-updates', shallow: true

@@ -1,5 +1,7 @@
 class RacesController < ApplicationController
-  before_action :set_race, only: [:show, :edit, :update, :destroy]
+  helper_method :pubnub_data
+
+  before_action :set_race, only: [:show, :edit, :update, :destroy, :start]
 
   def index
     @races = Race.all
@@ -26,32 +28,43 @@ class RacesController < ApplicationController
   end
 
   def create
-    RunRaceJob.perform_later(race_params)
-    redirect_to :race_running, notice: 'Race is currently in progress. Please wait...'
+    @race = Race.create!(race_params)
+    redirect_to @race, notice: 'Race saved'
   end
 
-  def running
+  def start
+    StartRaceJob.perform_later(@race.id)
   end
 
   private
-    def set_race
-      @race = Race.find(params[:id])
-    end
 
-    def race_params
-      params
-        .require(:race)
-        .permit(
-          :name,
-          :description,
-          :race_delay,
-          :thread_count,
-          :lock_timeout,
-          :update_count,
-          :month_code,
-          :counter_code,
-          :processor,
-          :driver
-        )
-    end
+  def set_race
+    @race = Race.find(params[:id])
+  end
+
+  def race_params
+    params
+      .require(:race)
+      .permit(
+        :name,
+        :description,
+        :race_delay,
+        :thread_count,
+        :lock_timeout,
+        :update_count,
+        :month_code,
+        :counter_code,
+        :processor,
+        :driver
+      )
+  end
+
+  def pubnub_data
+    @pubnub_data ||= 
+      AtrOne::Container['pubnub']
+        .env
+        .slice(:subscribe_key, :user_id)
+        .merge(channel: 'at-the-races')
+        .transform_keys { |key| "pubnub_#{key}".to_sym }
+  end
 end
