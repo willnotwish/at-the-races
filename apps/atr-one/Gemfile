@@ -29,3 +29,5 @@ gem 'slim-rails', '3.2.0'
 
 gem 'celluloid', '0.17.4'
 gem 'pubnub'
+
+gem "dry-initializer", "~> 3.0"

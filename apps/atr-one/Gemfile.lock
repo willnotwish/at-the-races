@@ -289,6 +289,7 @@ DEPENDENCIES
   aasm (~> 5.5)
   byebug
   celluloid (= 0.17.4)
+  dry-initializer (~> 3.0)
   dry-rails (~> 0.3.0)
   dry-transaction (~> 0.13.2)
   factory_bot_rails (~> 5.2)

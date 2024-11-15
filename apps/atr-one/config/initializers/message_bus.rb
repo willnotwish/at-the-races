@@ -2,7 +2,7 @@
 class MessageBus
   include Dry::Events::Publisher[:internal_message_bus]
 
-  # This message bus will publish the following events
+  # This message bus publishes the following events
   %w[
     update.allocated
     lock.acquired
