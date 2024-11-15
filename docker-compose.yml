@@ -26,6 +26,20 @@ services:
     ports:
       - 3010:3000
 
+  atr-viz:
+    image: node:20
+    secrets:
+      - pubnub
+    volumes:
+      - ./apps/atr-viz:/app
+    stdin_open: true
+    tty: true
+    user: node
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0
+    ports:
+      - 5173:5173
+
   mysql55:
     image: mysql:5.5
     environment: 
