@@ -11,6 +11,9 @@ end
 # To set a default tag for the logger, do this
 # logger.push_tags('xxx')
 
+
+
+
 Dry::Rails.container do
   register 'logger', logger
 

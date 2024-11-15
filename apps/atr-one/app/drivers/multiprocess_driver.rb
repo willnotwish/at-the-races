@@ -4,7 +4,18 @@ class MultiprocessDriver
   include AtrOne::Deps[:logger]
   include Tracing
 
-  include AtrOne::Deps[:message_bus]
+  # include AtrOne::Deps[:message_bus]
+
+  # class RaceEventPublisher
+  #   extend Dry::Initializer
+
+  #   param :message_bus
+  #   param :race
+
+  #   def call(id, payload)
+  #     message_bus.publish(id, payload.merge(race_id: race.id))
+  #   end
+  # end
 
   def call(updates:, processor:, thread_count: 2, **processor_opts)
     # thread_count should really be called process_count
@@ -31,14 +42,14 @@ class MultiprocessDriver
 
   private
 
-  def process(updates:, processor:, **processor_opts)
-    message_bus.publish('driver.start', text: "driver started")
+  def process(updates:, processor:, monitor:, **processor_opts)
+    monitor.call('driver.start', text: "driver started")
 
     updates.each do |update|
       trace "Processing update: #{update.id}. Value: #{update.value}"
-      processor.call(update: update, **processor_opts)
+      processor.call(update: update, monitor: monitor, **processor_opts)
     end
 
-    message_bus.publish('driver.stop', text: "driver stop")
+    monitor.call('driver.stop', text: "driver stop")
   end
 end

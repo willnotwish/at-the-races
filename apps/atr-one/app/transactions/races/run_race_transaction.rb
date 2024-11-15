@@ -9,6 +9,7 @@ module Races
     try :generate_source_updates, catch: ActiveRecord::ActiveRecordError
     map :resolve_processor
     map :resolve_driver
+    map :build_monitor
     try :call_driver, catch: ActiveRecord::ActiveRecordError
     try :record_result, catch: ActiveRecord::ActiveRecordError
 
@@ -41,14 +42,22 @@ module Races
       { race: race, driver: driver, **opts }
     end
 
-    def call_driver(race:, processor:, driver:, updates:)
+    def build_monitor(race:, **opts)
+      message_bus = AtrOne::Container.resolve('message_bus')
+      monitor = RaceMonitor.new(race: race, message_bus: message_bus)
+
+      { race: race, monitor: monitor, **opts }
+    end
+
+    def call_driver(race:, processor:, driver:, updates:, monitor:)
       started_at = Time.now
       update_groups = driver.call(
         updates: updates,
         processor: processor,
         thread_count: race.thread_count,
         race_delay: race.race_delay,
-        lock_timeout: race.lock_timeout
+        lock_timeout: race.lock_timeout,
+        monitor: monitor
       )
 
       { race: race, update_groups: update_groups, started_at: started_at, duration: Time.now - started_at }
