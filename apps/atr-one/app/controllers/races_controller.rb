@@ -1,5 +1,5 @@
 class RacesController < ApplicationController
-  helper_method :pubnub_data
+  helper_method :pubnub_config
 
   before_action :set_race, only: [:show, :edit, :update, :destroy, :start]
 
@@ -59,12 +59,11 @@ class RacesController < ApplicationController
       )
   end
 
-  def pubnub_data
-    @pubnub_data ||= 
-      AtrOne::Container['pubnub']
-        .env
-        .slice(:subscribe_key, :user_id)
-        .merge(channel: 'at-the-races')
-        .transform_keys { |key| "pubnub_#{key}".to_sym }
+  def pubnub_config
+    @pubnub_config ||= AtrOne::Container['pubnub'].env
+                                                  .slice(:subscribe_key, :user_id)
+                                                  .merge(channel: 'at-the-races')
+                                                  .symbolize_keys
+                                                  # .transform_keys { |key| "pubnub_#{key}".to_sym }
   end
 end

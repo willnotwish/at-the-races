@@ -14,3 +14,13 @@
 
 # Docker compose secrets. See https://docs.docker.com/compose/how-tos/use-secrets/
 /config/secrets/*
+
+# Vite Ruby
+/public/vite
+/public/vite-dev
+/public/vite-test
+node_modules
+*.local
+.DS_Store
+
+pubnub.log

@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   one:
-    image: willnotwish/at-the-races-dev:2.5.8
+    image: willnotwish/at-the-races-dev-with-node:2.5.8
     secrets:
       - pubnub
     environment:
@@ -13,18 +13,52 @@ services:
       DATABASE_PASSWORD: root
       RAILS_MAX_THREADS: 10
       REDIS_URL: redis://redis:6379/11
+      VITE_RUBY_HOST: one-vite
     stdin_open: true
     tty: true
     user: nick
     volumes:
       - ./apps/atr-one:/app
       - atr-one-bundle:/usr/local/bundle
+      - vite-dev:/app/public/vite-dev
+      - vite-test:/app/public/vite-test
     working_dir: /app
     depends_on: 
       - mysql55
+      - one-vite
     command: bundle exec rails s -b 0.0.0.0
     ports:
       - 3010:3000
+
+  one-vite:
+    image: willnotwish/at-the-races-dev-with-node:2.5.8
+    # secrets:
+    #   - pubnub
+    environment:
+      DEBUG: '*vite*'
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: 1
+      DATABASE_HOST: mysql55
+      DATABASE_NAME: atr_one
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: root
+      RAILS_MAX_THREADS: 10
+      REDIS_URL: redis://redis:6379/11
+      VITE_RUBY_HOST: 0.0.0.0
+    stdin_open: true
+    tty: true
+    user: nick
+    volumes:
+      - ./apps/atr-one:/app
+      - atr-one-bundle:/usr/local/bundle
+      - node_modules:/app/node_modules
+      - vite-dev:/app/public/vite-dev
+      - vite-test:/app/public/vite-test
+    working_dir: /app
+    command: bundle exec vite dev -- --host 0.0.0.0
+    ports:
+      - 3036:3036
+
 
   mysql55:
     image: mysql:5.5
@@ -86,4 +120,7 @@ secrets:
 volumes:
   atr-one-bundle:
   atr-one-mysql55-data:
+  node_modules:
   redis:
+  vite-dev:
+  vite-test:

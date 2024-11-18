@@ -25,12 +25,8 @@ dl.mt-8
 /   .mt-8= render partial: 'results_summary', object: @race_results, as: :results
 / - else
 
-h3.font-bold.text-lg.mt-8 Visualisation
-= button_to(:start, remote: true, id: 'start_button', class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4') do
- 'Start race now
-
 .mt-8
-  = content_tag :div, nil, id: 'race_running_container', data: pubnub_data, class: 'grid grid-cols-4 gap-2'
+  = content_tag :div, nil, ref: 'root', id: 'visualization', data: { race: @race.to_json, pubnub: pubnub_config }, class: 'grid grid-cols-4 gap-2'
 
-nav.mt-8.border-2.p-2
+nav.mt-8.border-t-4.border-t-slate-300.p-2
   = link_to 'Back to list', races_path, class: 'text-orange-700 hover:underline pl-4'

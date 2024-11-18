@@ -9,20 +9,19 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
   gem 'byebug'
-  gem "factory_bot_rails", "~> 5.2"
+  gem 'factory_bot_rails', '~> 5.2'
 end
 
 group :test do
-  gem "rspec", "~> 3.13"
-  gem "rspec-rails", "~> 4.1"
-  gem "shoulda-matchers", "~> 4.5"
+  gem 'rspec', '~> 3.13'
+  gem 'rspec-rails', '~> 4.1'
+  gem 'shoulda-matchers', '~> 4.5'
 end
 
-gem "aasm", "~> 5.5"
-gem "dry-rails", "~> 0.3.0"
-gem "dry-transaction", "~> 0.13.2"
+gem 'aasm', '~> 5.5'
+gem 'dry-rails', '~> 0.3.0'
+gem 'dry-transaction', '~> 0.13.2'
 gem 'mysql2', '0.4.10'
-# gem 'redis', '4.7.1'
 gem 'redis', '< 4.6'
 gem 'sidekiq', '~> 5.2'
 gem 'slim-rails', '3.2.0'
@@ -30,4 +29,11 @@ gem 'slim-rails', '3.2.0'
 gem 'celluloid', '0.17.4'
 gem 'pubnub'
 
-gem "dry-initializer", "~> 3.0"
+gem 'dry-initializer', '~> 3.0'
+
+gem 'dry-cli', '0.7.0'
+
+gem 'rack-proxy', '0.6.1'
+gem 'zeitwerk', '2.2.0'
+gem 'vite_ruby', '3.0.0'
+gem 'vite_rails_legacy', '~> 3.1'
