@@ -5,7 +5,7 @@ class RaceMonitor
   end
 
   def call(id, payload)
-    message_bus.publish(id, payload.merge(race_id: race.id))
+    message_bus.publish(id, payload.merge(race_id: race.id, timestamp: Time.now.to_f))
   end
 
   # alias signal call

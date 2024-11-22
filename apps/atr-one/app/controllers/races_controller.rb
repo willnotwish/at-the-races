@@ -2,7 +2,9 @@ class RacesController < ApplicationController
   helper_method :pubnub_config
 
   before_action :set_race, only: [:show, :edit, :update, :destroy, :start]
-
+  
+  skip_before_action :verify_authenticity_token, only: [:start]
+  
   def index
     @races = Race.all
   end
@@ -34,6 +36,9 @@ class RacesController < ApplicationController
 
   def start
     StartRaceJob.perform_later(@race.id)
+
+    # DEBUGGING. Always return JSON response for now
+    render json: @race.to_json
   end
 
   private

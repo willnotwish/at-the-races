@@ -1,8 +1,16 @@
 <script>
 
-import Pubnub from 'pubnub'
+import LoggingPanel from './LoggingPanel.vue'
+import TimelinePanel from './TimelinePanel.vue'
+import { subscribeToPubnub } from '../helpers/pubnub-wrapper'
+import { DataSet } from 'vis-data'
 
 export default {
+  components: {
+    LoggingPanel,
+    TimelinePanel
+  },
+
   props: {
     mainTitle: String,
     raceConfig: Object,
@@ -11,72 +19,66 @@ export default {
 
   data() {
     return {
-      count: 0,
-      events: []
+      dataset: new DataSet(),
+      groupIds: []
     }
   },
 
   computed: {
     raceId() {
       return this.raceConfig.id
-    }
+    },
   },
 
   methods: {
-    onEventReceived(event) {
+    onPubnubEvent(event) {
+      console.log("onPubnubEvent received: ", event)
+
       const message = event.message
-      const message_type = message.id
-      const timetoken = event.timetoken
       const payload = message.payload
-      const event_race_id = payload.race_id
 
-      console.log("onMessageReceived received, timetoken: ", message, timetoken)
-
-      if (event_race_id != this.race_id) {
-        console.log("Unknown race id. Message ignored...")
+      if (payload.race_id != this.raceId) {
+        console.log("Unexpected race id. Event ignored.")
         return
       }
 
-      this.count++
-      this.events.push(event)
-    }
+      const type = message.id
+      if (type == 'groups.defined') {
+        this.groupIds = payload.groups
+      }
+
+      const item = {
+        id: event.timetoken, // a bit dubious, but maybe OK
+        type: type,
+        text: payload.text,
+        source: payload.pid,
+        timestamp: payload.timestamp
+      }
+
+      console.log('About to add item to source data set: ', item)
+      this.dataset.add(item)
+    },
   },
 
   mounted() {
-    console.log("pubnub config: ", this.pubnubConfig)
-
-    const client = new Pubnub({
-      subscribeKey: this.pubnubConfig.subscribe_key,
-      userId: this.pubnubConfig.user_id
-    })
-
-    console.log("Pubnub client: ", client)
-
-    const subscription = client
-      .channel(this.pubnubConfig.channel)
-      .subscription({ receivePresenceEvents: false });
-      
-    subscription.addListener({ message: this.onEventReceived })
-    subscription.subscribe()
-
-    console.log('Listening for pubnub messages...')
-    console.log('Race ID: ', this.raceId)
+    subscribeToPubnub(this.onPubnubEvent, this.pubnubConfig)
   }
 }
 </script>
 
 <template>
-  <div border-2 border-black>
-    <header class="my-8">
-      <h1 class="text-xl mb-4">{{ mainTitle }}</h1>
-      <h2 class="text-lg mb-4">Race {{ raceId }}</h2>
+  <v-container>
+    <header>
+      <h1>{{ mainTitle }}</h1>
+      <h2>Race {{ raceId }}</h2>
     </header>
 
-    <main>
-      <div class="mb-4">Event count: <b>{{ count }}</b></div>
-      <ul>
-        <li v-for="event in events" :key="event">{{ event.message }}</li>
-      </ul>
-    </main>
-  </div>
+    <v-card class="mx-auto">
+      <TimelinePanel :source="dataset" :groupIds="groupIds"></TimelinePanel>
+    </v-card>
+
+    <v-card class="mx-auto">
+      <LoggingPanel :source="dataset"></LoggingPanel>
+    </v-card>
+  </v-container>
 </template>

@@ -31,6 +31,8 @@ class MultiprocessDriver
       end
       groups[pid.to_s] = group
     end
+    notify_groups(groups, **processor_opts)
+    
     Process.waitall # wait for the forked processes to finish before continuing
 
     # Need this but not sure why (to do with forking I guess)
@@ -51,5 +53,9 @@ class MultiprocessDriver
     end
 
     monitor.call('driver.stop', text: "driver stop")
+  end
+
+  def notify_groups(groups, monitor:, **)
+    monitor.call('groups.defined', text: "groups defined", groups: groups.keys)
   end
 end

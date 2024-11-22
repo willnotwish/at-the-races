@@ -25,7 +25,19 @@
 // import '~/index.css'
 
 import { createApp, onMounted } from 'vue'
+
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
 import App from '~/components/App.vue'
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
 
 const container = document.getElementById("visualization")
 
@@ -35,6 +47,8 @@ console.log("raceConfig: ", raceConfig)
 const pubnubConfig = JSON.parse(container.dataset.pubnub)
 console.log("pubnubConfig: ", pubnubConfig)
 
-createApp(App, { raceConfig, pubnubConfig }).mount(container)
+createApp(App, { raceConfig, pubnubConfig })
+  .use(vuetify)
+  .mount(container)
 
 console.log('Vite ⚡️ Rails. In application.js. App onMounted.')
