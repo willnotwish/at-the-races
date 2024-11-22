@@ -1,14 +1,14 @@
 doctype html
 html
   head
-    title At The Races v1
+    title At The Races v0.1.1
     meta name="viewport" content="width=device-width,initial-scale=1"
 
-    = stylesheet_link_tag 'application', media: 'all'
+    = vite_client_tag
+    = vite_javascript_tag 'application'
 
-    = javascript_include_tag 'application'
     script src="https://cdn.tailwindcss.com"
-    script src="https://cdn.pubnub.com/sdk/javascript/pubnub.8.2.10.js"
+    / script src="https://cdn.pubnub.com/sdk/javascript/pubnub.8.2.10.js"
 
     = csrf_meta_tags
 

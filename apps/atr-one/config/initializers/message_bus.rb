@@ -5,6 +5,7 @@ class MessageBus
   # This message bus publishes the following events
   %w[
     update.allocated
+    update.processed
     lock.acquired
     lock.released
     race_delay.starting
@@ -12,6 +13,7 @@ class MessageBus
     trace
     driver.start
     driver.stop
+    groups.defined
   ].each { |event| register_event(event) }
 
   def publish(id, opts)

@@ -63,6 +63,7 @@ module Races
       { race: race, update_groups: update_groups, started_at: started_at, duration: Time.now - started_at }
     end
 
+    # Update groups are keyed by thread or process ID, depending on how the updates were processed
     def record_result(race:, update_groups:, started_at:, duration:)
       month = Month.find_by(code: race.month_code)
       result = race.race_results.create!(
@@ -71,7 +72,6 @@ module Races
         counter_count: Counter.where(month: month, code: race.counter_code).count
       )
 
-      # Update groups are keyed by thread or process ID, depending on how the updates were processed
       update_groups.each do |thread_or_process_id, updates|
         updates.each { |update| update.update!(race_result: result, processed_by: thread_or_process_id) }
       end

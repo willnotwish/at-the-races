@@ -23,4 +23,6 @@ class PubnubEventBroker
   alias on_trace publish
   alias on_driver_start publish
   alias on_driver_stop publish
+  alias on_groups_defined publish
+  alias on_update_processed publish
 end

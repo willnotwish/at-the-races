@@ -75,6 +75,7 @@ class DatabaseLockingProcessor
   
       counter.update!(value: update.value)
       update.process! # marks update as processed
+      notify('update.processed', text: "update #{update.id} processed")
   
       trace "Updated counter #{counter.code}. Value: #{counter.value}"
     end
