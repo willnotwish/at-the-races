@@ -8,7 +8,8 @@ export default {
 
   props: {
     raceConfig: Object,
-    pubnubConfig: Object
+    pubnubConfig: Object,
+    centrifugoConfig: Object
   },
 
   methods: {
@@ -33,7 +34,7 @@ export default {
       <v-btn @click="startRace">
         Start now
       </v-btn>
-      <Visualizer mainTitle="ATR Visualization" :raceConfig="raceConfig" :pubnubConfig="pubnubConfig" />
+      <Visualizer mainTitle="ATR Visualization" :raceConfig="raceConfig" :pubnubConfig="pubnubConfig" :centrifugoConfig="centrifugoConfig" />
     </v-container>
   </v-app>
 </template>

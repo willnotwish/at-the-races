@@ -47,7 +47,10 @@ console.log("raceConfig: ", raceConfig)
 const pubnubConfig = JSON.parse(container.dataset.pubnub)
 console.log("pubnubConfig: ", pubnubConfig)
 
-createApp(App, { raceConfig, pubnubConfig })
+const centrifugoConfig = JSON.parse(container.dataset.centrifugo)
+console.log("centrifugoConfig: ", centrifugoConfig)
+
+createApp(App, { raceConfig, pubnubConfig, centrifugoConfig })
   .use(vuetify)
   .mount(container)
 

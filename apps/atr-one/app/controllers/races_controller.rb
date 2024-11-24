@@ -1,5 +1,5 @@
 class RacesController < ApplicationController
-  helper_method :pubnub_config
+  helper_method :pubnub_config, :centrifugo_config
 
   before_action :set_race, only: [:show, :edit, :update, :destroy, :start]
   
@@ -69,6 +69,15 @@ class RacesController < ApplicationController
                                                   .slice(:subscribe_key, :user_id)
                                                   .merge(channel: 'at-the-races')
                                                   .symbolize_keys
-                                                  # .transform_keys { |key| "pubnub_#{key}".to_sym }
+  end
+
+  def centrifugo_config
+    @centrifugo_config ||= build_centrifugo_config
+  end
+
+  def build_centrifugo_config
+    notary = AtrOne::Container['centrifugo_notary']
+    token = notary.issue_connection_token(sub: '42')
+    { ws_url: 'ws://localhost:8000/connection/websocket', token: token }
   end
 end

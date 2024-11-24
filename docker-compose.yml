@@ -5,6 +5,7 @@ services:
     image: willnotwish/at-the-races-dev-with-node:2.5.8
     secrets:
       - pubnub
+      - centrifugo.json
     environment:
       RAILS_LOG_TO_STDOUT: 1
       DATABASE_HOST: mysql55
@@ -80,6 +81,7 @@ services:
     image: willnotwish/at-the-races-dev:2.5.8
     secrets:
       - pubnub
+      - centrifugo.json
     environment:
       RAILS_LOG_TO_STDOUT: 1
       DATABASE_HOST: mysql55
@@ -107,15 +109,25 @@ services:
       - redis:/data
     ports:
       - "5003:6379"    
-  
-  # kafka:
-  #   image: apache/kafka:3.9.0
-  #   ports:
-  #     - 3317:3306
 
+  centrifugo:
+    # container_name: centrifugo
+    image: centrifugo/centrifugo:v5
+    secrets:
+      - centrifugo.json
+    command: centrifugo -c /run/secrets/centrifugo.json
+    ports:
+      - 8000:8000
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535 
+  
 secrets:
   pubnub:
     file: ./apps/atr-one/config/secrets/pubnub.yml
+  centrifugo.json:
+    file: ./apps/atr-one/config/secrets/centrifugo.json
 
 volumes:
   atr-one-bundle:

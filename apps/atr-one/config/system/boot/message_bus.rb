@@ -10,7 +10,7 @@ AtrOne::Container.boot(:message_bus) do |container|
   # Code that needs to run for a component to be usable at application's runtime.
   # Subscribe default broker to the message bus
   start do
-    container[:pubnub_event_broker].tap do |broker|
+    container[:centrifugo_event_broker].tap do |broker|
       container[:message_bus].subscribe(broker)
     end
   end
@@ -18,7 +18,7 @@ AtrOne::Container.boot(:message_bus) do |container|
   # Code that needs to run to stop a component, eg close a database connection, clear some artifacts etc
   # Unsubscribe default broker from the message bus
   stop do
-    container[:pubnub_event_broker].tap do |broker|
+    container[:centrifugo_event_broker].tap do |broker|
       container[:message_bus].unsubscribe(broker)
     end
   end

@@ -27,4 +27,4 @@ The issue I sometimes encounter in production is where two updates come in close
 
 I will use Docker containers to run the correct software versions.
 
-I want to be able to switch different solutions in and out to compare performance. For this I will use the `dry-rb` auto injection, so I am including the `dry-rails` gem. I may, hoever, have to compromise wrt the versions I can use. My production app uses Ruby 2.5.8.
+I want to be able to switch different solutions in and out to compare performance. For this I will use the `dry-rb` auto injection, so I am including the `dry-rails` gem. I may, however, have to compromise wrt the versions I can use. My production app uses Ruby 2.5.8.

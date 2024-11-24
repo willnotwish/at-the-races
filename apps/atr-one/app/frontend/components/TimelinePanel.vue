@@ -43,7 +43,7 @@ export default {
           start: moment.unix(item.timestamp),
           content: item.text,
           group: item.source,
-          className: 'xxx'
+          className: 'xxxy'
         }
         console.log("Timeline panel. Mapped data:", mapped)
 
