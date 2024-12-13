@@ -11,6 +11,8 @@ class RacesController < ApplicationController
 
   def show
     @race_results = @race.race_results
+    
+    render layout: 'visualization'
   end
 
   def new

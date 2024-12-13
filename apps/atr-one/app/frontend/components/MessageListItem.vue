@@ -8,7 +8,7 @@ export default {
 </script>
 
 <template>
-  <v-card>
+  <div>
     {{ message }}
-  </v-card>
+  </div>
 </template>

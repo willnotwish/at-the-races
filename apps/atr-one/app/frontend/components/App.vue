@@ -29,13 +29,11 @@ export default {
 </script>
 
 <template>
-  <v-app>
-    <v-container>
-      <v-btn @click="startRace">
-        Start now
-      </v-btn>
-      <Visualizer mainTitle="ATR Visualization" :raceConfig="raceConfig" :pubnubConfig="pubnubConfig" :centrifugoConfig="centrifugoConfig" />
-    </v-container>
-  </v-app>
+  <div>
+    <button @click="startRace" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+      Run race now
+    </button>
+    <Visualizer mainTitle="Visualization" :raceConfig="raceConfig" :pubnubConfig="pubnubConfig" :centrifugoConfig="centrifugoConfig" />
+  </div>
 </template>
 

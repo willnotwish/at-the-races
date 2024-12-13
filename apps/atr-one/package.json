@@ -4,13 +4,15 @@
     "centrifuge": "^5.2.2",
     "moment": "^2.30.1",
     "pubnub": "^8.3.1",
-    "uuid": "^11.0.3",
+    "uuid": "^9.0.0",
     "vis-data": "^7.1.9",
     "vis-timeline": "^7.7.3",
     "vite": "^5.0.0",
     "vite-plugin-ruby": "^3.0.0"
   },
   "devDependencies": {
-    "vite-plugin-vuetify": "^2.0.4"
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16"
   }
 }

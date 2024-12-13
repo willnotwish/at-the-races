@@ -72,18 +72,18 @@ export default {
 </script>
 
 <template>
-  <v-container>
-    <header>
-      <h1>{{ mainTitle }}</h1>
+  <div>
+    <header class="my-8">
+      <h1 class="text-lg font-bold mb-4">{{ mainTitle }}</h1>
       <h2>Race {{ raceId }}</h2>
     </header>
 
-    <v-card class="mx-auto">
+    <div class="mx-auto">
       <TimelinePanel :source="dataset" :groupIds="groupIds"></TimelinePanel>
-    </v-card>
+    </div>
 
-    <v-card class="mx-auto">
+    <div class="mx-auto">
       <LoggingPanel :source="dataset"></LoggingPanel>
-    </v-card>
-  </v-container>
+    </div>
+  </div>
 </template>

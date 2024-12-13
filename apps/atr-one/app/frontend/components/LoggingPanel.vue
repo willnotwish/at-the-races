@@ -34,10 +34,12 @@ export default {
 </script>
 
 <template>
-  <v-list lines="one" density="compact">
-    <v-list-subheader>Message count: {{ messageCount }}</v-list-subheader>
-    <v-list-item v-for="id in messageIds" :key="id">
-      <MessageListItem :message="source.get(id)"></MessageListItem>
-    </v-list-item>
-  </v-list>
+  <div>
+    <h3 class="mb-2">Message count: {{ messageCount }}</h3>
+    <ul>
+      <li v-for="id in messageIds" :key="id">
+        <MessageListItem :message="source.get(id)"></MessageListItem>
+      </li>
+    </ul>
+  </div>
 </template>
