@@ -4,10 +4,10 @@ class PubnubEventBroker
   include AtrOne::Deps[:logger]
   include Tracing
 
-  include AtrOne::Deps[:pubnub]
+  include AtrOne::Deps[client: 'pubnub']
 
   def publish(event)
-    pubnub.publish(
+    client.publish(
       channel: 'at-the-races',
       message: { id: event.id, payload: event.payload }
     ) do |envelope|

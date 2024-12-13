@@ -2,8 +2,10 @@
 
 import LoggingPanel from './LoggingPanel.vue'
 import TimelinePanel from './TimelinePanel.vue'
-import { subscribeToPubnub } from '../helpers/pubnub-wrapper'
+// import { subscribeToPubnub } from '../helpers/pubnub-wrapper'
+import { subscribeToCentrifugo } from '../helpers/centrifugo-wrapper'
 import { DataSet } from 'vis-data'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   components: {
@@ -14,7 +16,8 @@ export default {
   props: {
     mainTitle: String,
     raceConfig: Object,
-    pubnubConfig: Object
+    pubnubConfig: Object,
+    centrifugoConfig: Object
   },
 
   data() {
@@ -31,14 +34,15 @@ export default {
   },
 
   methods: {
-    onPubnubEvent(event) {
-      console.log("onPubnubEvent received: ", event)
+
+    onDataPublished(event) {
+      console.log("onDataPublished received: ", event)
 
       const message = event.message
       const payload = message.payload
 
       if (payload.race_id != this.raceId) {
-        console.log("Unexpected race id. Event ignored.")
+        console.log("onDataPublished. Unexpected race id. Event ignored.")
         return
       }
 
@@ -48,20 +52,21 @@ export default {
       }
 
       const item = {
-        id: event.timetoken, // a bit dubious, but maybe OK
+        id: uuidv4(),
         type: type,
         text: payload.text,
         source: payload.pid,
         timestamp: payload.timestamp
       }
 
-      console.log('About to add item to source data set: ', item)
+      console.log('onDataPublished. About to add item to source data set: ', item)
       this.dataset.add(item)
     },
   },
 
   mounted() {
-    subscribeToPubnub(this.onPubnubEvent, this.pubnubConfig)
+    subscribeToCentrifugo(this.onDataPublished, this.centrifugoConfig)
+    // subscribeToPubnub(this.onPubnubEvent, this.pubnubConfig)
   }
 }
 </script>

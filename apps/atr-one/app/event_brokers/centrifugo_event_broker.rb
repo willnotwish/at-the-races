@@ -4,13 +4,11 @@ class CentrifugoEventBroker
   include AtrOne::Deps[:logger]
   include Tracing
 
-  include AtrOne::Deps[:centrifugo_client]
+  include AtrOne::Deps[client: 'centrifugo.client']
 
   def publish(event)
-    trace "About to publish event to centrifugo: #{event}"
-
     begin
-      centrifugo_client.publish(
+      client.publish(
         channel: 'at-the-races',
         data: { message: { id: event.id, payload: event.payload } }
       )

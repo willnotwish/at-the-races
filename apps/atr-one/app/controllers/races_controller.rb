@@ -76,8 +76,14 @@ class RacesController < ApplicationController
   end
 
   def build_centrifugo_config
-    notary = AtrOne::Container['centrifugo_notary']
-    token = notary.issue_connection_token(sub: '42')
-    { ws_url: 'ws://localhost:8000/connection/websocket', token: token }
+    {
+      ws_url: ENV['CENTRIFUGO_WS_URL'],
+      token: new_centrifugo_connection_token,
+      channel: 'at-the-races' 
+    }
+  end
+
+  def new_centrifugo_connection_token
+    AtrOne::Container['centrifugo.notary'].issue_connection_token(sub: '42')
   end
 end
