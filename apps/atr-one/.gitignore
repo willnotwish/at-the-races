@@ -24,3 +24,5 @@ node_modules
 .DS_Store
 
 pubnub.log
+
+/config/centrifugo/config.json

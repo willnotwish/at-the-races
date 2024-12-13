@@ -1,17 +1,21 @@
 require 'tracing'
 
-class PubnubEventBroker
+class CentrifugoEventBroker
   include AtrOne::Deps[:logger]
   include Tracing
 
-  include AtrOne::Deps[client: 'pubnub']
+  include AtrOne::Deps[client: 'centrifugo.client']
 
   def publish(event)
-    client.publish(
-      channel: 'at-the-races',
-      message: { id: event.id, payload: event.payload }
-    ) do |envelope|
-      trace "Published. Response: #{envelope.response}. Status: #{envelope.status}"
+    begin
+      client.publish(
+        channel: 'at-the-races',
+        data: { message: { id: event.id, payload: event.payload } }
+      )
+    rescue Cent::ResponseError => ex
+      trace "Centrifugo error: #{ex}"
+    rescue Faraday::ClientError => ex
+      trace "Faraday client (network) error: #{ex}"
     end
   end
 
