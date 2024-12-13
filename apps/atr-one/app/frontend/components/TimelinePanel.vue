@@ -57,8 +57,8 @@ export default {
 </script>
 
 <template>
-  <div class="panel">
-    <button @click="view">View Timeline</button>
-    <div ref='container'></div>
+  <div>
+    <button @click="view" class="text-orange-700 hover:underline">View Timeline</button>
+    <div ref="container"></div>
   </div>
 </template>

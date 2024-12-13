@@ -4,13 +4,13 @@ import RubyPlugin from 'vite-plugin-ruby'
 // See https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue
 import vue from '@vitejs/plugin-vue'
 
-import vuetify from 'vite-plugin-vuetify'
+// import vuetify from 'vite-plugin-vuetify'
 
 export default defineConfig({
   plugins: [
     RubyPlugin(),
-    vue(),
-    vuetify({ autoImport: true })
+    vue()
+    // vuetify({ autoImport: true })
   ],
   server: {
     hmr: {

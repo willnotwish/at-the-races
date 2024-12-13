@@ -22,36 +22,4 @@
 // const channels = import.meta.globEager('./**/*_channel.js')
 
 // Example: Import a stylesheet in app/frontend/index.css
-// import '~/index.css'
-
-import { createApp, onMounted } from 'vue'
-
-// Vuetify
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
-import App from '~/components/App.vue'
-
-const vuetify = createVuetify({
-  components,
-  directives,
-})
-
-const container = document.getElementById("visualization")
-
-const raceConfig = JSON.parse(container.dataset.race)
-console.log("raceConfig: ", raceConfig)
-
-const pubnubConfig = JSON.parse(container.dataset.pubnub)
-console.log("pubnubConfig: ", pubnubConfig)
-
-const centrifugoConfig = JSON.parse(container.dataset.centrifugo)
-console.log("centrifugoConfig: ", centrifugoConfig)
-
-createApp(App, { raceConfig, pubnubConfig, centrifugoConfig })
-  .use(vuetify)
-  .mount(container)
-
-console.log('Vite ⚡️ Rails. In application.js. App onMounted.')
+import '~/styles/tailwind-directives.css'
