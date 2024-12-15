@@ -1,11 +1,11 @@
 <script>
 
-import MessageListItem from './MessageListItem.vue'
+import Message from './Message.vue'
 import { DataSet } from 'vis-data'
 
 export default {
   components: {
-    MessageListItem,
+    Message,
   },
 
   props: {
@@ -35,10 +35,10 @@ export default {
 
 <template>
   <div>
-    <h3 class="mb-2">Message count: {{ messageCount }}</h3>
+    <h3 class="mb-2">Message count: <strong>{{ messageCount }}</strong></h3>
     <ul>
       <li v-for="id in messageIds" :key="id">
-        <MessageListItem :message="source.get(id)"></MessageListItem>
+        <Message :message="source.get(id)"></Message>
       </li>
     </ul>
   </div>

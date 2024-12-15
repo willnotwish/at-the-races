@@ -1,7 +1,7 @@
 <script>
 
-import LoggingPanel from './LoggingPanel.vue'
 import TimelinePanel from './TimelinePanel.vue'
+import MessagePanel from './MessagePanel.vue'
 // import { subscribeToPubnub } from '../helpers/pubnub-wrapper'
 import { subscribeToCentrifugo } from '../helpers/centrifugo-wrapper'
 import { DataSet } from 'vis-data'
@@ -9,8 +9,8 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default {
   components: {
-    LoggingPanel,
-    TimelinePanel
+    TimelinePanel,
+    MessagePanel
   },
 
   props: {
@@ -49,6 +49,7 @@ export default {
       const type = message.id
       if (type == 'groups.defined') {
         this.groupIds = payload.groups
+        return
       }
 
       const item = {
@@ -83,7 +84,7 @@ export default {
     </div>
 
     <div class="mx-auto">
-      <LoggingPanel :source="dataset"></LoggingPanel>
+      <MessagePanel :source="dataset"></MessagePanel>
     </div>
   </div>
 </template>
