@@ -7,7 +7,7 @@ import moment from 'moment'
 export default {
   props: {
     source: DataSet,
-    groupIds: Array
+    groups: DataSet
   },
 
   data() {
@@ -16,42 +16,30 @@ export default {
     }
   },
 
-  computed: {
-    groups() {
-      return this.groupIds.map(id => {
-        return { 
-          id: id,
-          content: `Process ${id}`
-        }
-      })
-    }
-  },
-
   methods: {
     view() {
-      const timeline = new Timeline(this.$refs.container, this.timelineData)
-      timeline.setGroups(this.groups)
+      new Timeline(this.$refs.container)
+        .setData({groups: this.groups, items: this.timelineData})
     }
   },
 
   mounted() {
     // Timeline requires a different data format
-    const pipe = createNewDataPipeFrom(this.source)
-      .map(item => {
-        const mapped = {
-          id: item.id,
-          start: moment.unix(item.timestamp),
-          content: item.text,
-          group: item.source,
-          className: 'xxxy'
-        }
-        console.log("Timeline panel. Mapped data:", mapped)
+    function toTimelineFormat(item) {
+      return {
+        id: item.id,
+        start: moment.unix(item.timestamp),
+        content: item.text,
+        group: item.source,
+        className: 'xxxy'
+      }
+    }
 
-        return mapped
-      })
+    createNewDataPipeFrom(this.source)
+      .map(toTimelineFormat)
       .to(this.timelineData)
-
-    pipe.all().start()
+      .all()
+      .start()
   }
 }
 </script>
