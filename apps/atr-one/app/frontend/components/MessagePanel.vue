@@ -6,6 +6,7 @@
 
 import Message from './Message.vue'
 import { DataSet } from 'vis-data'
+import colourSchemes from '../helpers/colour-schemes'
 
 export default {
   components: {
@@ -20,9 +21,7 @@ export default {
   data() {
     return {
       ids: [],
-      outerBorderClasses: ['border-red-400', 'border-indigo-600', 'border-yellow-400', 'border-lime-500', 'border-blue-500'],
-      defaultColour: 'slate-500',
-      twClasses: { 'outerBorder': {} }
+      colourSchemeMap: {} // maps colour scheme names to source IDs
     }
   },
 
@@ -39,12 +38,9 @@ export default {
     decorateMessage(id) {
       const data = this.source.get(id)
       const groupId = data.source.toString()
-      
-      const htmlClasses = {}
-      htmlClasses.wrapper = { 'border-2': true }
-      htmlClasses.wrapper[this.twClasses['outerBorder'][groupId]] = true
-
-      return { data, metadata: { htmlClasses, ...this.groups.get(groupId) } }
+      const colourScheme = this.colourSchemeMap[groupId] || 'neutral'
+      const metadata = { colourScheme, ...this.groups.get(groupId) }
+      return { data, metadata }
     }
   },
 
@@ -55,10 +51,12 @@ export default {
       console.log("MessagePanel add event on source dataset. Pushed ID. Count now: ", this.messageCount)
     })
 
+    const csNames = Object.keys(colourSchemes)
+    console.log("Colour scheme names: ", csNames)
     let index = 0
     this.groups.on('add', (_event, properties) => {
-      properties.items.forEach((id) => {
-        this.twClasses['outerBorder'][id] = this.outerBorderClasses[index] || this.defaultColour
+      properties.items.forEach((groupId) => {
+        this.colourSchemeMap[groupId] = csNames[index] || csNames[0]
         index++
       })
     })

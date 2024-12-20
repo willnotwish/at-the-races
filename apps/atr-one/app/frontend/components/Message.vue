@@ -1,5 +1,6 @@
 <script>
 import moment from 'moment'
+import colourSchemes from '../helpers/colour-schemes'
 
 export default {
   props: {
@@ -23,19 +24,23 @@ export default {
       return this.metadata.label
     },
 
-    wrapperClass() {
-      return this.metadata.htmlClasses.wrapper
-    }
+    colourScheme() {
+      return colourSchemes[this.metadata.colourScheme]
+    },
   },
+
+  mounted() {
+    console.log("Message component mounted. Metadata: ", this.metadata)
+  }
 }
 </script>
 
 <template>
-  <div class="mb-2 p-2" :class="wrapperClass" :title="title">
+  <div class="mb-2 p-2 border-2" :class="colourScheme.container" :title="title">
     <!-- <p>{{ metadata }}</p> -->
     <header class="flex flex-row flex-nowrap justify-between">
-      <div class="mr-4 font-bold">{{ labelText }}</div>
-      <div font-bold>{{ data.type }}</div>
+      <div class="mr-4 font-bold" :class="colourScheme.label">{{ labelText }}</div>
+      <div font-bold :class="colourScheme.label">{{ data.type }}</div>
     </header>
     <div class="flex flex-row flex-nowrap justify-between">
       <p class="mb-2 font-light text-sm">{{ timestamp }}</p>
