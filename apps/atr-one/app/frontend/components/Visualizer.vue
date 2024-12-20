@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       dataset: new DataSet(),
-      groupIds: []
+      groups: new DataSet()
     }
   },
 
@@ -48,7 +48,14 @@ export default {
 
       const type = message.id
       if (type == 'groups.defined') {
-        this.groupIds = payload.groups
+        payload.groups.forEach((groupId) => {
+          const group = {
+            id: groupId,
+            label: `Process or thread ${groupId}`
+          }
+          console.log('onDataPublished. About to add group: ', group)
+          this.groups.add(group)
+        })
         return
       }
 
@@ -80,11 +87,11 @@ export default {
     </header>
 
     <div class="mx-auto">
-      <TimelinePanel :source="dataset" :groupIds="groupIds"></TimelinePanel>
+      <TimelinePanel :source="dataset" :groups="groups"></TimelinePanel>
     </div>
 
     <div class="mx-auto">
-      <MessagePanel :source="dataset"></MessagePanel>
+      <MessagePanel :source="dataset" :groups="groups"></MessagePanel>
     </div>
   </div>
 </template>
