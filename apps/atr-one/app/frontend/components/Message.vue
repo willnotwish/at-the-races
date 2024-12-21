@@ -1,6 +1,6 @@
 <script>
 import moment from 'moment'
-import colourSchemes from '../helpers/colour-schemes'
+import { colourSchemes } from '../helpers/colour-schemes'
 
 export default {
   props: {
@@ -27,6 +27,41 @@ export default {
     colourScheme() {
       return colourSchemes[this.metadata.colourScheme]
     },
+
+    columnIndex() {
+      return this.metadata.columnIndex
+    },
+
+    columnCount() {
+      return this.metadata.columnCount
+    },
+
+    prePad() {
+      const a = []
+      for (let index = 0; index < this.columnIndex; index++) {
+        a.push(index)
+      }
+      return a
+    },
+
+    postPad() {
+      const a = []
+      for (let index = this.columnIndex + 1; index < this.columnCount; index++) {
+        a.push(index)
+      }
+      return a
+    },
+
+    containerClass() {
+      const classes = {}
+      classes[this.colourScheme.container] = true
+
+      // const positions = colsStartAndEndClasses[this.columnNumber]      
+      // classes[positions[0]] = true
+      // classes[positions[1]] = true
+      
+      return classes
+    }
   },
 
   mounted() {
@@ -36,8 +71,8 @@ export default {
 </script>
 
 <template>
-  <div class="mb-2 p-2 border-2" :class="colourScheme.container" :title="title">
-    <!-- <p>{{ metadata }}</p> -->
+  <div v-for="n in prePad"></div>
+  <div class="mb-2 p-2 border-2" :class="containerClass" :title="title">
     <header class="flex flex-row flex-nowrap justify-between">
       <div class="mr-4 font-bold" :class="colourScheme.label">{{ labelText }}</div>
       <div font-bold :class="colourScheme.label">{{ data.type }}</div>
@@ -47,4 +82,5 @@ export default {
       <p class="font-light text-sm text-right">{{ data.text }}</p>
     </div>
   </div>
+  <div v-for="n in postPad"></div>
 </template>

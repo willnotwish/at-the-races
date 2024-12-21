@@ -6,7 +6,7 @@
 
 import Message from './Message.vue'
 import { DataSet } from 'vis-data'
-import colourSchemes from '../helpers/colour-schemes'
+import { colourSchemes, gridColsClasses } from '../helpers/colour-schemes'
 
 export default {
   components: {
@@ -21,7 +21,8 @@ export default {
   data() {
     return {
       ids: [],
-      colourSchemeMap: {} // maps colour scheme names to source IDs
+      colourSchemeMap: {}, // maps colour scheme names to source IDs
+      columnIndexMap: {}   // maps column indices to source IDs
     }
   },
 
@@ -31,6 +32,9 @@ export default {
     },
     groupCount() {
       return this.groups.length
+    },
+    gridColsClass() {
+      return gridColsClasses[this.groupCount - 1]
     }
   },
 
@@ -39,24 +43,25 @@ export default {
       const data = this.source.get(id)
       const groupId = data.source.toString()
       const colourScheme = this.colourSchemeMap[groupId] || 'neutral'
-      const metadata = { colourScheme, ...this.groups.get(groupId) }
+      const columnIndex = this.columnIndexMap[groupId] || 0
+      const columnCount = this.groupCount
+      const metadata = { colourScheme, columnIndex, columnCount, ...this.groups.get(groupId) }
       return { data, metadata }
-    }
+    },
   },
 
   mounted() {
     // The 'add' event is called when one or more items are added to the dataset    
     this.source.on('add', (_event, properties) => {
       this.ids.push(...properties.items) // in case there are many, use ...
-      console.log("MessagePanel add event on source dataset. Pushed ID. Count now: ", this.messageCount)
     })
 
     const csNames = Object.keys(colourSchemes)
-    console.log("Colour scheme names: ", csNames)
     let index = 0
     this.groups.on('add', (_event, properties) => {
       properties.items.forEach((groupId) => {
         this.colourSchemeMap[groupId] = csNames[index] || csNames[0]
+        this.columnIndexMap[groupId] = index
         index++
       })
     })
@@ -67,10 +72,8 @@ export default {
 <template>
   <div>
     <h3 class="mb-2">Message count: <strong>{{ messageCount }}</strong></h3>
-    <ul>
-      <li v-for="id in ids" :key="id">
-        <Message v-bind="decorateMessage(id)"></Message>
-      </li>
-    </ul>
+    <div class="grid gap-1" :class="gridColsClass">
+      <Message v-for="id in ids" :key="id" v-bind="decorateMessage(id)"></Message>
+    </div>
   </div>
 </template>
