@@ -51,7 +51,7 @@ export default {
         payload.groups.forEach((groupId) => {
           const group = {
             id: groupId,
-            label: `Process or thread ${groupId}`
+            label: groupId
           }
           console.log('onDataPublished. About to add group: ', group)
           this.groups.add(group)
